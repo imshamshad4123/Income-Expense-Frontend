@@ -126,6 +126,10 @@ const AllTransaction = ({ alltransactions, account }) => {
                 </div>
             </div>
             <div className=" table table-responsive">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8c6875ca37801f2b97bfd1bc59b4d9c90f24cc1d
             <div className=' text-success my-5'>
                 <table className="table table-striped">
                     <thead>
@@ -166,7 +170,11 @@ const AllTransaction = ({ alltransactions, account }) => {
                 </table>
 
             </div>
+<<<<<<< HEAD
             </div>
+=======
+         </div>
+>>>>>>> 8c6875ca37801f2b97bfd1bc59b4d9c90f24cc1d
         </div>
     )
 }
