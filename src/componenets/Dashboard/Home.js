@@ -55,7 +55,7 @@ const Home = () => {
               <h1   className=" display-5 fw-bold">Manage Your Income And Expenses</h1>
               <p   className=" col-md-8 fs-4"> Manage your money more effectively and make better financial
               decisions with this easy-to-use software.</p>
-              <p   className=" display-8 fw-bold">NOTE: The server for the backend is slow because it uses free plan so have some patience while loading 😃.</p>
+              <p   className=" display-7 fw-bold">NOTE: The server for the backend is slow because it uses free plan so have some patience while loading 😃.</p>
               <Link  to="/Register"  className=" btn btn-outline-primary" type="button">Sign Up</Link>
             </div>
           </div>
