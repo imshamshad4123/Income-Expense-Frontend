@@ -148,7 +148,7 @@ const AuthContextProvider = ({ children }) => {
                 })
             }
 
-            // window.location.href = "/login";
+            window.location.href = "/login";
 
             console.log("register success",response)
         } catch (error) {
