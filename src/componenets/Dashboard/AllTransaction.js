@@ -129,6 +129,8 @@ const AllTransaction = ({ alltransactions, account }) => {
                     </div>
                 </div>
             </div>
+            <div className=" table table-responsive">
+
             <div className=' text-success my-5'>
                 <table className="table table-striped">
                     <thead>
@@ -169,6 +171,7 @@ const AllTransaction = ({ alltransactions, account }) => {
                 </table>
 
             </div>
+         </div>
         </div>
     )
 }
