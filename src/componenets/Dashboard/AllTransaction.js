@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { transactionContext } from '../context/TransactionContext/TransactionContext';
 
 const AllTransaction = ({ alltransactions, account }) => {
-    const { deleteTransactionAction ,updateTransactionAction} = useContext(transactionContext)
+    const { deleteTransactionAction, updateTransactionAction } = useContext(transactionContext)
     const [currentTransaction, setcurrentTransaction] = useState({ name: "", amount: 0, transactionType: "", category: "", date: Date.now(), notes: "" })
 
     console.log("all", alltransactions)
@@ -54,7 +54,7 @@ const AllTransaction = ({ alltransactions, account }) => {
             console.log("not deletiing")
         }
     }
-   
+
     return (
         <div>
             <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -65,7 +65,7 @@ const AllTransaction = ({ alltransactions, account }) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form  style={{ width: '25rem' }}>
+                            <form style={{ width: '25rem' }}>
                                 <h1>Update Transaction!!!</h1>
 
                                 <div className="mb-3">
@@ -126,55 +126,47 @@ const AllTransaction = ({ alltransactions, account }) => {
                 </div>
             </div>
             <div className=" table table-responsive">
-<<<<<<< HEAD
-=======
+                <div className=' text-success my-5'>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Amount(&#8377;)</th>
+                                <th scope='col'> Note</th>
+                                <th scope='col'>Update</th>
+                                <th scope='col'>Delete</th>
+                            </tr>
+                        </thead>
 
->>>>>>> 8c6875ca37801f2b97bfd1bc59b4d9c90f24cc1d
-            <div className=' text-success my-5'>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Amount(&#8377;)</th>
-                            <th scope='col'> Note</th>
-                            <th scope='col'>Update</th>
-                            <th scope='col'>Delete</th>
-                        </tr>
-                    </thead>
+                        <tbody>
+                            {alltransactions?.map((transaction, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <th scope="row">{index + 1}</th>
+                                        <td>{transaction?.name}</td>
+                                        <td>{transaction?.transactionType}</td>
+                                        <td>&#8377;{transaction?.amount}</td>
+                                        <td>{transaction?.notes}</td>
+                                        <td>
+                                            <button type="button" className="btn " data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat" onClick={() => { console.log("Button clicked"); updateTransaction(transaction) }}><FontAwesomeIcon icon={faEdit} size="lg" color="black" /></button>
 
-                    <tbody>
-                        {alltransactions?.map((transaction, index) => {
-                            return (
-                                <tr key={index}>
-                                    <th scope="row">{index + 1}</th>
-                                    <td>{transaction?.name}</td>
-                                    <td>{transaction?.transactionType}</td>
-                                    <td>&#8377;{transaction?.amount}</td>
-                                    <td>{transaction?.notes}</td>
-                                    <td>
-                                    <button type="button" className="btn " data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat" onClick={() => { console.log("Button clicked"); updateTransaction(transaction) }}><FontAwesomeIcon icon={faEdit} size="lg" color="black" /></button>
+                                        </td>
+                                        <td>
+                                            <Link onClick={() => handleDelete(transaction?._id)} className="icon-button">
+                                                <FontAwesomeIcon icon={faTrash} size="lg" color="red" />
+                                            </Link>
+                                        </td>
 
-                                    </td>
-                                    <td>
-                                        <Link onClick={() => handleDelete(transaction?._id)} className="icon-button">
-                                            <FontAwesomeIcon icon={faTrash} size="lg" color="red" />
-                                        </Link>
-                                    </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
 
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-
+                </div>
             </div>
-<<<<<<< HEAD
-            </div>
-=======
-         </div>
->>>>>>> 8c6875ca37801f2b97bfd1bc59b4d9c90f24cc1d
         </div>
     )
 }
