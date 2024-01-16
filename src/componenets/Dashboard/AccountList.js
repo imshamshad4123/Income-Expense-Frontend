@@ -117,47 +117,55 @@ const AccountList = ({ accounts }) => {
             </div>
 
             {(!accounts || accounts.length === 0) ? (
-                <>
-                    
-                    <div className="container ">
+                <div className="container">
                     <div>No Accounts to display</div>
-                        <Link to="/dashboard/create-account" type='button' className='btn btn-success'>Create Account</Link>
-                    </div>
-
-                </>
+                    <Link to="/dashboard/create-account" type='button' className='btn btn-success'>Create Account</Link>
+                </div>
             ) : (
-                <>
+                <div className="container">
                     {accounts?.map(acc => (
-                        <div className="container" key={acc?._id}>
-                        <div className="  card w-50 mx-auto mb-3 shadow-lg p-3 mb-2 bg-body-tertiary rounded" key={acc?._id}>
-                            <div className="card-body">
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <h5 className="card-title">{acc?.name} </h5>
-                                    <span style={{ marginLeft: 'auto' }} >
-                                        {/* <Link to={`/dashboard/update-account/${acc?._id}`} className="i con-button"> */}
-                                        <button type="button" className="btn " data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat" onClick={() => { console.log("Button clicked"); updateAccount(acc) }}><FontAwesomeIcon icon={faEdit} size="lg" color="black" /></button>
-                                        {/* </Link> */}
-                                        <Link className="icon-button" onClick={() => { console.log("delete linkm clicked"); handleDelete(acc?._id) }}>
-                                            <FontAwesomeIcon icon={faTrash} size="lg" color="red" />
-                                        </Link>
-                                    </span>
-                                </div>
+                        <div className="row justify-content-center" key={acc?._id}>
+                            <div className="col-md-6">
+                                <div className="card mb-3 shadow-lg p-3 mb-2 bg-body-tertiary rounded">
+                                    <div className="card-body">
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <h5 className="card-title">{acc?.name}</h5>
+                                            <span style={{ marginLeft: 'auto' }}>
+                                                <button
+                                                    type="button"
+                                                    className="btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal"
+                                                    data-bs-whatever="@fat"
+                                                    onClick={() => { console.log("Button clicked"); updateAccount(acc) }}
+                                                >
+                                                    <FontAwesomeIcon icon={faEdit} size="lg" color="black" />
+                                                </button>
+                                                <Link
+                                                    className="icon-button"
+                                                    onClick={() => { console.log("delete link clicked"); handleDelete(acc?._id) }}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} size="lg" color="red" />
+                                                </Link>
+                                            </span>
+                                        </div>
 
-                                <p className="card-text">{acc?.notes}</p>
-                                <div className="d-flex justify-content-between">
-                                    <h3>Total Available Balance-&#8377;{acc?.initialBalance}</h3>
-                                    <Link to={`/account-details/${acc._id}`} type='button' className='btn btn-success'>
-                                        View Transactions
-                                    </Link>
+                                        <p className="card-text">{acc?.notes}</p>
+                                        <div className="d-flex flex-column flex-md-row justify-content-between">
+                                            <h3 className="mb-3 mb-md-0">Total Available Balance-&#8377;{acc?.initialBalance}</h3>
+                                            <Link to={`/account-details/${acc._id}`} type='button' className='btn btn-success mt-3 mt-md-0'>
+                                                View Transactions
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                {/* <a href="#" className="btn btn-primary">Button</a> */}
                             </div>
                         </div>
-                        </div>
                     ))}
-                </>
+                </div>
             )}
+
+
         </div>
     );
 };

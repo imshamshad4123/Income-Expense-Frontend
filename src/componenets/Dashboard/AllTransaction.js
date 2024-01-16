@@ -54,11 +54,7 @@ const AllTransaction = ({ alltransactions, account }) => {
             console.log("not deletiing")
         }
     }
-    // const updateNote = (currentTransaction) => {
-    //     // ref.current.click();
-    //     setTransaction({name:currentTransaction.name,amount:currentTransaction.amount,transactionType:currentTransaction.transactionType,etag:currentTransaction.tag});
-
-    // }
+   
     return (
         <div>
             <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -129,6 +125,7 @@ const AllTransaction = ({ alltransactions, account }) => {
                     </div>
                 </div>
             </div>
+            <div className=" table table-responsive">
             <div className=' text-success my-5'>
                 <table className="table table-striped">
                     <thead>
@@ -168,6 +165,7 @@ const AllTransaction = ({ alltransactions, account }) => {
                     </tbody>
                 </table>
 
+            </div>
             </div>
         </div>
     )
