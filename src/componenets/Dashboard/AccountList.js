@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -7,15 +7,21 @@ const AccountList = ({ accounts }) => {
 
     const { updateAccountAction, deleteAccountAction } = useContext(accountContext)
     console.log("acc", accounts);
-    // const ref = useRef(null)
+    const [accountstate, setAccounts] = useState([])
+    useEffect(() => {
+        // Update accountsState when the prop changes
+        setAccounts(accounts);
+    }, [accounts]);
+    console.log("accountstate====", accountstate)
+    const ref = useRef(null)
     // refclose is used to close the modal window using useref hook 
-    // const refClose = useRef(null)
-    const [currentAccount, setCurrentAccount] = useState({ _id: "", name: "", initialBalance: "", accountType: "", notes: "" })
+    const refClose = useRef(null)
+    const [currentAccount, setCurrentAccount] = useState({ _id: "", name: "", initialBalance: 0, accountType: "", notes: "" })
     // const [currentAccount, setCurrentAccount] = useState({ name: "", initialBalance: "", accountType: "", notes: "" })
 
 
     const updateAccount = (currentacc) => {
-        // ref.current.click();
+        ref.current.click();
         console.log("currrrr=====================", currentacc)
         setCurrentAccount({ _id: currentacc._id, name: currentacc.name, initialBalance: currentacc.initialBalance, accountType: currentacc.accountType, notes: currentacc.notes });
         // setCurrentAccount({name: currentacc.name, initialBalance: currentacc.initialBalance, accountType: currentacc.accountType, notes: currentacc.notes });
@@ -24,17 +30,28 @@ const AccountList = ({ accounts }) => {
 
     const onChange = (e) => {
         //... jo pehle se hai use rehne do aur content add kro ya override kro
-        setCurrentAccount({ ...currentAccount, [e.target.name]: e.target.value })
+        const newValue = e.target.name === "initialBalance" ? parseInt(e.target.value, 10) : e.target.value;
+
+        setCurrentAccount({ ...currentAccount, [e.target.name]: newValue })
     }
     console.log("curr==================", currentAccount)
-    const handleClick = (e) => {
+    const handleClick = async (e) => {
         e.preventDefault();
         console.log("before click")
-        updateAccountAction(currentAccount)
-        console.log("after click")
-        // refClose.current.click();
-        // e.preventDefault();
-        // addNote(note.title,note.description,note.tag);
+        const res = await updateAccountAction(currentAccount)
+
+
+        // console.log("res==============",res)
+        if (res === "success") {
+            console.log("success====")
+            const updatedAccounts = accounts.map(acc => acc._id === currentAccount._id ? currentAccount : acc);
+            setAccounts(updatedAccounts);
+            refClose.current.click();
+        } else {
+            alert("Something Went Wrong!")
+        }
+
+
     }
 
     //delete an account
@@ -55,6 +72,11 @@ const AccountList = ({ accounts }) => {
     return (
 
         <div>
+
+            <button ref={ref} type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#exampleModal">
+                Launch demo modal
+            </button>
+
             <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -99,7 +121,7 @@ const AccountList = ({ accounts }) => {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" ref={refClose} className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary" onClick={handleClick}>Update Account</button>
                         </div>
 
@@ -116,14 +138,14 @@ const AccountList = ({ accounts }) => {
                 </div>
             </div>
 
-            {(!accounts || accounts.length === 0) ? (
+            {(!accountstate || accountstate.length === 0) ? (
                 <div className="container">
                     <div>No Accounts to display</div>
                     <Link to="/dashboard/create-account" type='button' className='btn btn-success'>Create Account</Link>
                 </div>
             ) : (
                 <div className="container">
-                    {accounts?.map(acc => (
+                    {accountstate?.map(acc => (
                         <div className="row justify-content-center" key={acc?._id}>
                             <div className="col-md-6">
                                 <div className="card mb-3 shadow-lg p-3 mb-2 bg-body-tertiary rounded">
@@ -152,7 +174,7 @@ const AccountList = ({ accounts }) => {
 
                                         <p className="card-text">{acc?.notes}</p>
                                         <div className="d-flex flex-column flex-md-row justify-content-between">
-                                            <h3 className="mb-3 mb-md-0">Total Available Balance-&#8377;{acc?.initialBalance}</h3>
+                                            <h3 className="mb-3 mb-md-0">Total InitialBalance Balance-&#8377;{acc?.initialBalance}</h3>
                                             <Link to={`/account-details/${acc._id}`} type='button' className='btn btn-success mt-3 mt-md-0'>
                                                 View Transactions
                                             </Link>

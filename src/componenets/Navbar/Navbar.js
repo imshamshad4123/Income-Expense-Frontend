@@ -1,9 +1,16 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { authContext } from '../context/AuthContext/AuthContext'
 
 const Navbar = () => {
   const { logoutUserAction, token } = useContext(authContext)
+  const navigate=useNavigate()
+  const onclick=async (e)=>{
+    await logoutUserAction();
+    
+    navigate("/login")
+    
+  }
   return (
     <div>
     <nav className="navbar navbar-expand-lg  bg-body-secondary " style={{ backgroundColor: '#343a40', color: 'white' }}>
@@ -17,6 +24,9 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link active" aria-current="page" to="/">Home</Link>
             </li>
+            {token &&<li className="nav-item">
+               <Link className="nav-link" to="/dashboard">Dashboard</Link>
+            </li>}
             {!token &&<li className="nav-item">
                <Link className="nav-link" to="/register">Register</Link>
             </li>}
@@ -28,8 +38,7 @@ const Navbar = () => {
           </ul>
           <form className="d-flex" role="search">
             {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/> */}
-            {token&&<Link className="btn btn-outline-success" onClick={logoutUserAction} >Logout</Link>}
-
+            {token&&<Link className="btn btn-outline-success" onClick={onclick} >Logout</Link>}
           </form>
         </div>
       </div>

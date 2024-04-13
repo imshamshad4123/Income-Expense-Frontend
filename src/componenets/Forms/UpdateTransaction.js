@@ -19,7 +19,7 @@ const UpdateTransaction = () => {
         transactionType: transaction?.data?.transactionType, // Set a default value
         amount:  transaction?.data?.amount,
         notes:  transaction?.data?.notes,
-        category:  transaction?.data?.category,
+        category:transaction?.data?.category,
         date: "",
     });
     // const [formData, setFormData] = useState(transaction);

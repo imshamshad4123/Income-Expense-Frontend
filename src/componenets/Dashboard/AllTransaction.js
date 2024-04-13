@@ -10,6 +10,8 @@ const AllTransaction = ({ alltransactions, account }) => {
 
     console.log("all", alltransactions)
     //reduce mesthod takes accumulator and initialiser
+    const ref = useRef(null)
+    // refclose is used to close the modal window using useref hook 
     const refClose = useRef(null)
     // const [currentAccount, setCurrentAccount] = useState({ _id: "", name: "", initialBalance: "", accountType: "", notes: "" })
     // const [currentAccount, setCurrentAccount] = useState({ name: "", initialBalance: "", accountType: "", notes: "" })
@@ -17,6 +19,7 @@ const AllTransaction = ({ alltransactions, account }) => {
 
     const updateTransaction = (currentTra) => {
         // ref.current.click();
+
         console.log("currrrr=====================", currentTra)
         setcurrentTransaction({ _id: currentTra._id, name: currentTra.name, amount: currentTra.amount, transactionType: currentTra.transactionType, category: currentTra.category, notes: currentTra.notes });
         // setCurrentAccount({name: currentacc.name, initialBalance: currentacc.initialBalance, accountType: currentacc.accountType, notes: currentacc.notes });
@@ -25,13 +28,17 @@ const AllTransaction = ({ alltransactions, account }) => {
 
     const onChange = (e) => {
         //... jo pehle se hai use rehne do aur content add kro ya override kro
-        setcurrentTransaction({ ...currentTransaction, [e.target.name]: e.target.value })
+        const newValue = e.target.name === "amount" ? parseInt(e.target.value, 10) : e.target.value;
+
+        setcurrentTransaction({ ...currentTransaction, [e.target.name]: newValue })
     }
     console.log("curr==================", currentTransaction)
     const handleClick = (e) => {
         e.preventDefault();
         console.log("before click")
         updateTransactionAction(currentTransaction)
+        refClose.current.click();
+
         console.log("after click")
         // refClose.current.click();
         // e.preventDefault();
@@ -57,6 +64,9 @@ const AllTransaction = ({ alltransactions, account }) => {
 
     return (
         <div>
+             <button ref={ref} type="button" className="btn btn-primary d-none" data-toggle="modal" data-target="#exampleModal">
+                Launch demo modal
+            </button>
             <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -118,7 +128,7 @@ const AllTransaction = ({ alltransactions, account }) => {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-secondary" ref={refClose} data-bs-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary" onClick={handleClick}>Update Transaction</button>
                         </div>
 

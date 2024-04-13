@@ -10,7 +10,7 @@ const INITIAL_STATE = {
     error: null,
     loading: false,
     profile: null,
-    accounts:[],
+    accounts: [],
 
 }
 const reducer = (state, action) => {
@@ -48,7 +48,7 @@ const reducer = (state, action) => {
                 error: payload,
                 loading: false,
                 userAuth: null,
-                
+
             };
         case LOGOUT:
             //remove from storage
@@ -60,26 +60,26 @@ const reducer = (state, action) => {
                 userAuth: null,
             };
         case FETCH_PROFILE_SUCCESS:
-            return{
+            return {
                 ...state,
                 loading: false,
                 error: null,
                 profile: payload,
-              };
+            };
         case FETCH_PROFILE_FAIL:
-            return{
+            return {
                 ...state,
-                loading:false,
-                error:payload,
-                profile:null
+                loading: false,
+                error: payload,
+                profile: null
             }
 
         case SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_SUCCESS:
-            return{
+            return {
                 ...state,
-                accounts:payload,
-                loading:false,
-                error:null,
+                accounts: payload,
+                loading: false,
+                error: null,
             }
 
         case SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_FAIL:
@@ -94,7 +94,7 @@ const reducer = (state, action) => {
     }
 }
 const AuthContextProvider = ({ children }) => {
-    var success=false;
+    var success = false;
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
     const loginUserAction = async (formData) => {
@@ -105,7 +105,8 @@ const AuthContextProvider = ({ children }) => {
         }
         try {
             const response = await axios.post('https://income-expense-backend.onrender.com/api/v1/users/login', formData, config)
-            console.log(response)
+            // const response = await axios.post('http://localhost:5001/api/v1/users/login', formData, config)
+            console.log("Login response==",response)
             //response && response.data&& response.data.status is same aas below line
             if (response?.data?.status === "success") {
                 dispatch({
@@ -113,21 +114,20 @@ const AuthContextProvider = ({ children }) => {
                     payload: response.data
                 })
             }
-            success=true
+            success = true
             // json=await response.json();
             // console.log(json)
             // console.log(response)
-            window.location.href = "/dashboard";
-            
-           
+
+            return response?.data?.status
         } catch (error) {
-            console.log("error inside action ",error?.response?.data?.message)
+            console.log("error inside action ", error?.response?.data?.message)
 
             dispatch({
                 type: LOGIN_FAILED,
                 payload: error?.response?.data?.message,
             });
-
+            return error?.response?.data?.message
         }
     }
     const registerUserAction = async (formData) => {
@@ -136,9 +136,10 @@ const AuthContextProvider = ({ children }) => {
                 "content-type": "application/json"
             },
         }
-        console.log("formdata=======>",formData)
+        console.log("formdata=======>", formData)
         try {
             const response = await axios.post('https://income-expense-backend.onrender.com/api/v1/users/register', formData, config)
+            // const response = await axios.post('http://localhost:5001/api/v1/users/register', formData, config)
             console.log(response)
             //response && response.data&& response.data.status is same aas below line
             if (response?.data?.status === "success") {
@@ -148,9 +149,9 @@ const AuthContextProvider = ({ children }) => {
                 })
             }
 
-            window.location.href = "/login";
+            // window.location.href = "/login";
 
-            console.log("register success",response)
+            console.log("register success", response)
         } catch (error) {
             dispatch({
                 type: REGISTER_FAIL,
@@ -165,75 +166,83 @@ const AuthContextProvider = ({ children }) => {
             payload: null,
         });
         //Redirect
-        window.location.href = "/login";
-        };
+        // window.location.href = "/login";
+    };
     // profile user action
 
-    const fetchUserProfileAction=async()=>{
-        const config={
-            headers:{
-                "content-type":"application-json",
-                Authorization:`Bearer ${state?.userAuth?.token}`
+    const fetchUserProfileAction = async () => {
+        const config = {
+            headers: {
+                "content-type": "application-json",
+                Authorization: `Bearer ${state?.userAuth?.token}`
             }
         }
         try {
-            const response=await axios.get(`https://income-expense-backend.onrender.com/api/v1/users/profile`,config)
-            console.log("fetchprofile",response);
+            const response = await axios.get(`https://income-expense-backend.onrender.com/api/v1/users/profile`, config)
+            // const response = await axios.get(`http://localhost:5001/api/v1/users/profile`, config)
+
+            
+            console.log("fetchprofile", response);
             if (response?.data) {
-              dispatch({
-                type: FETCH_PROFILE_SUCCESS,
-                payload: response.data,
-              });
+                dispatch({
+                    type: FETCH_PROFILE_SUCCESS,
+                    payload: response.data,
+                });
             }
-          } catch (error) {
+        } catch (error) {
             dispatch({
-              type: FETCH_PROFILE_FAIL,
-              payload: error?.response?.data?.message,
+                type: FETCH_PROFILE_FAIL,
+                payload: error?.response?.data?.message,
             });
         }
     }
 
     //get singleuser all accouunts with transaction populated
-    const getSingleuserAllAccountAction=async()=>{
-        console.log("token iside action",state?.userAuth?.token)
-        const config={
-            headers:{
-                "content-type":"application/json",
+    const getSingleuserAllAccountAction = async () => {
+        console.log("token iside action", state?.userAuth?.token)
+        const config = {
+            headers: {
+                "content-type": "application/json",
                 Authorization: `Bearer ${state?.userAuth?.token}`,
             }
         }
         if (!state?.userAuth?.accounts) { // Check if data is already fetched
             // Fetch data if not cached
             try {
-              const response = await axios.get(`https://income-expense-backend.onrender.com/api/v1/account/user/id/`, config);
-              dispatch({
-                type: SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_SUCCESS,
-                payload: response?.data?.data,
-              });
+                const response = await axios.get(`https://income-expense-backend.onrender.com/api/v1/account/user/id/`, config);
+                // const response = await axios.get(`http://localhost:5001/api/v1/account/user/id/`, config);
+                if (response?.data?.status === "success") {
+                    dispatch({
+                        type: SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_SUCCESS,
+                        payload: response?.data?.data,
+                    });
 
-              console.log("insideresponse",response)
+                    console.log("insideresponse", response)
+                    return response?.data?.status
+                }
             } catch (error) {
                 dispatch({
-                    type:SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_FAIL,
-                    payload:error?.data?.response?.message,
+                    type: SINGLE_ACCOUNT_ALL_TRANSACTION_FETCH_FAIL,
+                    payload: error?.data?.response?.message,
                 })
+                return error?.data?.response?.message
             }
-          } else {
+        } else {
             // Data is already available, navigate directly
             window.location.href = "/dashboard";
-          }
+        }
     }
     return (<authContext.Provider value={{
         loginUserAction,
         userAuth: state,
-        token:state?.userAuth?.token,
+        token: state?.userAuth?.token,
         registerUserAction,
         logoutUserAction,
         fetchUserProfileAction,
-        error:state?.error,
+        error: state?.error,
         profile: state?.profile,
         getSingleuserAllAccountAction,
-        accounts:state?.accounts,
+        accounts: state?.accounts,
     }}>{children}</authContext.Provider>
     )
 }

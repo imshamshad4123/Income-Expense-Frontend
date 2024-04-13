@@ -2,20 +2,22 @@ import React, { useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { accountContext } from '../context/AccountContext/AccountContext'
 import AllTransaction from './AllTransaction'
+import { transactionContext } from '../context/TransactionContext/TransactionContext'
 
 const AccountDetails = () => {
-    const { getAccountDetails, account } = useContext(accountContext)
+    // const {  account } = useContext(accountContext)
+    const {getAccountDetails,account,transactions}=useContext(transactionContext)
     const { accountID } = useParams();
     console.log(accountID)
     useEffect(() => {
         getAccountDetails(accountID);
     }, [accountID])
-    console.log("Account-transaction", account?.transactions)
+    console.log("Account-transaction", transactions)
 
     //calculate Total Income
 
     //reduce mesthod takes accumulator and initializer in this case it is 0
-    const totalIncome = account?.transactions?.reduce((acc, transaction) => {
+    const totalIncome = transactions?.reduce((acc, transaction) => {
         console.log("bool", transaction?.transactionType === "Income")
         if (transaction?.transactionType === "Income") {
             return acc + transaction?.amount
@@ -25,7 +27,7 @@ const AccountDetails = () => {
     }, 0)
     console.log("totalIncome", totalIncome)
     //calculate total expenses
-    const totalExpense = account?.transactions?.reduce((acc, transaction) => {
+    const totalExpense = transactions?.reduce((acc, transaction) => {
         if (transaction?.transactionType === "Expenses") {
             return acc + transaction?.amount
         } else {
@@ -37,7 +39,7 @@ const AccountDetails = () => {
         <div>
             <>
                 
-                {account?.transactions?.length <= 0 ?<>
+                {transactions?.length <= 0 ?<>
                  <div className="container text-center   my-5">
                             <h2 className='text-success '> No Transaction To Dispaly!!!</h2> 
                             <Link to={`/create-transaction/${account?._id}`} type='button' className='btn' style={{ "backgroundColor": "#475", "color": "white" }}>
@@ -85,7 +87,7 @@ const AccountDetails = () => {
                             </Link>
                         </div>
                         {/* <h2 className='text-success my-5'> All Transactions For This Account!</h2> */}
-                        <AllTransaction alltransactions={account?.transactions} account={account} />
+                        <AllTransaction alltransactions={transactions} account={account} />
                     </>}
             </>
         </div>
