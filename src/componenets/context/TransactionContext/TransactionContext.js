@@ -111,6 +111,8 @@ const INITIAL_STATE = {
 
 }
 const TransactionContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+
    // since initiastate is not working tried this
     const setTokenFromLocalStorageToUserAuth=async()=>{
         console.log("setting token")
@@ -137,7 +139,6 @@ const TransactionContextProvider = ({ children }) => {
        
     }
 
-    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
     const createTransactionAction = async (formData) => {
         const config = {
             headers: {

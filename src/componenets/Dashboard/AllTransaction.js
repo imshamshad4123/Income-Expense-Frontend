@@ -1,11 +1,11 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef, useState,useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { transactionContext } from '../context/TransactionContext/TransactionContext';
 
 const AllTransaction = ({ alltransactions, account }) => {
-    const { deleteTransactionAction, updateTransactionAction } = useContext(transactionContext)
+    const { deleteTransactionAction, updateTransactionAction,setTokenFromLocalStorageToUserAuth } = useContext(transactionContext)
     const [currentTransaction, setcurrentTransaction] = useState({ name: "", amount: 0, transactionType: "", category: "", date: Date.now(), notes: "" })
 
     console.log("all", alltransactions)
@@ -15,7 +15,10 @@ const AllTransaction = ({ alltransactions, account }) => {
     const refClose = useRef(null)
     // const [currentAccount, setCurrentAccount] = useState({ _id: "", name: "", initialBalance: "", accountType: "", notes: "" })
     // const [currentAccount, setCurrentAccount] = useState({ name: "", initialBalance: "", accountType: "", notes: "" })
-
+    // setting token so that error whi deting and updating does not occur
+    useEffect( ()=>{
+        setTokenFromLocalStorageToUserAuth()
+       },[])
 
     const updateTransaction = (currentTra) => {
         // ref.current.click();
